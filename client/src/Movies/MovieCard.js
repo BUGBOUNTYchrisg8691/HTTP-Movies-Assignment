@@ -1,7 +1,6 @@
 import React from "react";
-import { useHistory, Route } from "react-router-dom";
-
-import EditMovie from "./EditMovie";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const MovieCard = (props) => {
   const { title, director, metascore, stars, id } = props.movie;
@@ -9,6 +8,17 @@ const MovieCard = (props) => {
 
   const handleOnClick = () => {
     hist.push(`/update-movie/${id}`);
+  };
+  const handleDeleteMovie = () => {
+    axios
+      .delete(`http://localhost:5000/api/movies/${id}`)
+      .then((res) => {
+        console.log(res);
+        hist.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -29,6 +39,9 @@ const MovieCard = (props) => {
       ))}
       {hist.location.pathname.includes("movies") ? (
         <button onClick={handleOnClick}>Edit Details</button>
+      ) : null}
+      {hist.location.pathname.includes("movies") ? (
+        <button onClick={handleDeleteMovie}>Delete Movie</button>
       ) : null}
     </div>
   );
