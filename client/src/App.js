@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
+import axios from "axios";
+
 import SavedList from "./Movies/SavedList";
 import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
 import UpdateForm from "./Movies/UpdateForm";
 import AddForm from "./Movies/AddForm";
-import axios from "axios";
 
 const App = () => {
   const [savedList, setSavedList] = useState([]);
@@ -14,8 +15,11 @@ const App = () => {
   const getMovieList = () => {
     axios
       .get("http://localhost:5000/api/movies")
-      .then((res) => setMovieList(res.data))
-      .catch((err) => console.log(err.response));
+      .then((res) => {
+        console.log("Get Success ==>> ", res);
+        setMovieList(res.data);
+      })
+      .catch((err) => console.log("Get Failure ==>> ", err.response));
   };
 
   const addToSavedList = (movie) => {

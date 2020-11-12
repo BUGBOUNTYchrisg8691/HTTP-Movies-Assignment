@@ -20,7 +20,10 @@ export default class UpdateForm extends Component {
       .then((res) => {
         console.log("Get Successful ==>> ", res);
         this.setState({
-          formValues: res.data,
+          formValues: {
+            ...res.data,
+            stars: res.data.stars.join(", "),
+          },
         });
       })
       .catch((err) => {
@@ -30,17 +33,21 @@ export default class UpdateForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const updatedMovie = {
+      ...this.state.formValues,
+      stars: this.state.formValues.stars.split(", "),
+    };
     axios
       .put(
         `http://localhost:5000/api/movies/${this.props.match.params.id}`,
-        this.state.formValues
+        updatedMovie
       )
       .then((res) => {
         console.log("Put Successful ==>> ", res);
         this.props.setMovieList(
           this.props.movieList.map((movie) => {
             if (movie.id === Number(this.props.match.params.id)) {
-              return this.state.formValues;
+              return updatedMovie;
             }
             return movie;
           })
@@ -75,18 +82,25 @@ export default class UpdateForm extends Component {
           value={this.state.formValues.title}
           onChange={this.handleChange}
         />
-        <label htmlFor="title">Director</label>
+        <label htmlFor="director">Director</label>
         <input
           type="text"
           name="director"
           value={this.state.formValues.director}
           onChange={this.handleChange}
         />
-        <label htmlFor="title">Metascore</label>
+        <label htmlFor="metascore">Metascore</label>
         <input
           type="text"
           name="metascore"
           value={this.state.formValues.metascore}
+          onChange={this.handleChange}
+        />
+        <label htmlFor="star">Stars</label>
+        <input
+          type="textarea"
+          name="stars"
+          value={this.state.formValues.stars}
           onChange={this.handleChange}
         />
         <button>Update Movie</button>

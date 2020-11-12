@@ -16,7 +16,7 @@ const MovieCard = (props) => {
         );
       })
       .catch((err) => {
-        console.log("Delete Failure ==>> ", err);
+        console.log("Delete Failure ==>> ", err.response);
       });
   };
 

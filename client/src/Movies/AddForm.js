@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { v4 as uuid } from "uuid";
 
 const initialFormValues = {
   title: "",
@@ -18,7 +17,7 @@ export default class UpdateForm extends Component {
     e.preventDefault();
     const newMovie = {
       ...this.state.formValues,
-      stars: ["Actor 1", "Actor 2", "Actor 3"],
+      stars: this.state.formValues.stars.split(", "),
     };
     axios
       .post("http://localhost:5000/api/movies", newMovie)
@@ -27,7 +26,7 @@ export default class UpdateForm extends Component {
         this.props.setMovieList(res.data);
       })
       .catch((err) => {
-        console.log("Post Failure ==>> ", err);
+        console.log("Post Failure ==>> ", err.response);
       });
     this.setState({
       formValues: initialFormValues,
@@ -69,7 +68,14 @@ export default class UpdateForm extends Component {
           value={this.state.formValues.metascore}
           onChange={this.handleChange}
         />
-        <button>Update Movie</button>
+        <label htmlFor="stars">Stars</label>
+        <input
+          type="textarea"
+          name="stars"
+          value={this.state.formValues.stars}
+          onChange={this.handleChange}
+        />
+        <button>Add Movie</button>
       </form>
     );
   }
